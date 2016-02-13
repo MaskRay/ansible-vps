@@ -1,7 +1,7 @@
 - name: Install libcharon-extra-plugins
   apt: name=libcharon-extra-plugins state=latest
 - name: Copy strongswan.conf for nameserver
-  copy: src=strongswan.conf dest=/etc/
+  template: src=strongswan.conf.j2 dest=/etc/strongswan.conf
   notify: restart ipsec
 - name: Copy ipsec.secrets
   copy: src=ipsec.secrets dest=/etc/ mode=600
