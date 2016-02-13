@@ -1,0 +1,17 @@
+- name: java | Accept Oracle license prior JDK installation
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections; echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+    creates=/usr/lib/jvm/java-8-oracle
+- name: java | Add PPA
+  apt_repository: repo=ppa:webupd8team/java
+- name: java | Install {{apt_java_installer}}
+  apt: name={{apt_java_installer}}
+
+
+- name: elasticsearch | Install signing key
+  apt_key: keyserver=pgp.mit.edu id=D88E42B4
+- name: elasticsearch | Add packages.elastic.co repository
+  apt_repository: repo='deb http://packages.elastic.co/elasticsearch/2.x/debian stable main'
+- name: elasticsearch | Install elasticsearch
+  apt: name=elasticsearch state=latest
+- name: elasticsearch | Start elasticsearch.service
+  service: name=elasticsearch state=started enabled=yes

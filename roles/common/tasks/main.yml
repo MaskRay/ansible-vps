@@ -1,0 +1,110 @@
+- name: sudoers
+  copy: src=sudoers dest=/etc/sudoers mode=400
+
+- name: unstable
+  copy: src=unstable.list dest=/etc/apt/sources.list.d/
+  notify: apt-get update
+
+- name: experimental
+  copy: src=experimental.list dest=/etc/apt/sources.list.d/
+  notify: apt-get update
+
+- name: preferences
+  copy: src=preferences dest=/etc/apt/
+
+- name: Install shell utilities
+  apt:
+    name:
+      - autojump
+      - cloc
+      - mlocate
+      - mosh
+      - parallel
+      - renameutils
+      - rlwrap
+      - rsync
+      - silversearcher-ag
+      - tmate
+      - tmux
+      - zsh
+- name: Install low-level system utilities
+  apt:
+    name:
+      #- care
+      - dstat
+      - forkstat
+      #- htop
+      - inotify-tools
+      #- iotop
+      #- ipmitool
+      - lsof
+      - ltrace
+      #- ncdu
+      - nethogs
+      #- perf-tools-unstable
+      - strace
+      - tcpdump
+      #- sysdig
+      #- tiptop
+- name: Install utilities for development
+  apt:
+    name:
+      - build-essential
+      - cmake
+      #- clang-{{latest.clang}}
+      #- exuberant-ctags  # wait for universal-ctags
+      #- gdb
+      - global
+      - git
+      #- id-utils
+      #- jq
+      #- lldb-{{latest.clang}}
+- name: Install development tools & libraries
+  apt:
+    name:
+      #- autoconf
+      #- libcurl4-openssl-dev
+      #- libluajit-5.1-dev
+      #- libmsgpack-dev
+      #- libtool-bin
+      #- libuv-dev
+      #- libxml2-dev
+      #- libxslt1-dev
+      #- libyaml-dev
+      - pkgconf
+- name: Install miscellaneous tools
+  apt:
+    name:
+      - autossh
+      - lnav
+      - socat
+      - xstow
+- name: Install package management tools
+  apt:
+    name:
+      - aptitude
+      - apt-file
+      - dctrl-tools
+      - dlocate
+      - checkinstall
+      - software-properties-common
+
+- name: Set time zone
+  command: timedatectl set-timezone Asia/Shanghai
+
+- name: Install chrony for Network Time Protocol daemon
+  apt: name=chrony
+- name: Configure chrony
+  copy: src=chrony.conf dest=/etc/chrony/
+  notify: restart chrony
+- name: Start chrony.service
+  service: name=chrony state=started enabled=yes
+
+- name: update-alternatives editor -> vim.basic
+  command: update-alternatives --set editor /usr/bin/vim.basic
+
+- git: repo=https://github.com/MaskRay/Config dest=/home/ray/Config
+  become_user: ray
+
+- name: chsh -s /bin/zsh ray
+  command: chsh -s /bin/zsh ray

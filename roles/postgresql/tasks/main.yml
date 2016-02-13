@@ -1,0 +1,16 @@
+# https://wiki.postgresql.org/wiki/Apt
+- name: Install pgdg package signing key
+  apt_key: keyserver=pgp.mit.edu id=ACCC4CF8
+- name: Add apt.postgresql.org repository
+  apt_repository: repo='deb https://apt.postgresql.org/pub/repos/apt/ {{ansible_distribution_release}}-pgdg main'
+- name: Install PostgreSQL {{latest.postgresql}} & dev
+  apt: name=postgresql,postgresql-server-dev-{{latest.postgresql}} state=latest
+- name: Enable service
+  service: name=postgresql state=started enabled=yes
+- name: Change listen port from 5433 to 5432
+  lineinfile:
+    dest: /etc/postgresql/{{latest.postgresql}}/main/postgresql.conf
+    regexp: port = 5433
+    line: port = 5432
+    backrefs: yes
+  notify: restart postgresql

@@ -1,0 +1,7 @@
+- name: Install squid3
+  apt: name=squid3 state=latest
+- name: Copy squid.conf
+  copy: src=squid.conf dest=/etc/squid3/
+  notify: restart squid3
+- name: Start squid3
+  service: name=squid3 state=started enabled=true

@@ -1,0 +1,6 @@
+- name: neovim | Install
+  apt: name=neovim default_release=experimental state=latest
+- name: neovim | Python 2
+  pip: executable=pip2 name=neovim
+- name: neovim | Python 3
+  pip: executable=pip3 name=neovim

@@ -1,0 +1,4 @@
+- name: restart sysctl
+  service: name=systemd-sysctl state=restarted
+- name: iptables-save
+  shell: iptables-save > /etc/iptables/rules.v4

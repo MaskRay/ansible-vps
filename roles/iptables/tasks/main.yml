@@ -1,0 +1,12 @@
+- name: Install iptables-persistent
+  apt: name=iptables-persistent state=latest
+- name: sysctl.d | Forwarding
+  copy: src=10-network.conf dest=/etc/sysctl.d/
+  notify: restart sysctl
+- name: MASQUERADE 192.168.8.0/24
+  iptables: table=nat chain=POSTROUTING source=192.168.8.0/24 jump=MASQUERADE
+  notify: iptables-save
+- name: MASQUERADE 10.99.1.0/24
+  iptables: table=nat chain=POSTROUTING source=10.99.1.0/24 jump=MASQUERADE
+  notify: iptables-save
+# iptables -t mangle -A FORWARD -s 10.99.1.0/24 -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360

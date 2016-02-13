@@ -1,0 +1,21 @@
+- hosts: all
+  become: yes
+  vars_files:
+    - defaults/main.yml
+  roles:
+    # No methods to run some of the roles. I circumvent this by using tags
+    # `ansible-playbook site.yml`: install all packages
+    # `ansible-playbook site.yml --tags python`: install python
+    - { role: common, tags: [common] }
+    - { role: tinc, tags: [tinc] }
+    - { role: iptables, tags: [iptables] }
+    - { role: nginx, tags: [nginx] }
+    - { role: neovim, tags: [neovim] }
+    - { role: python, tags: [python] }
+    - { role: squid, tags: [squid] }
+    - { role: strongswan, tags: [strongswan] }
+    #- { role: nodejs, tags: [nodejs] }
+    #- { role: postgresql, tags: [postgresql] }
+    #- { role: elasticsearch, tags: [elasticsearch] }
+    # grafana & influxdb
+    #- { role: grafana, tags: [grafana] }

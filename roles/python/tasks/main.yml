@@ -1,0 +1,28 @@
+# Python 2
+- name: python2 | Install
+  apt:
+    name:
+      - python-dev
+      - python-pip
+
+# latest Python 3
+- name: python3 | Install
+  apt:
+    name:
+      - python3-dev
+      - python3-pip
+
+# PyPy
+#- name: Install pypy
+#  apt: name=pypy state=latest
+
+## PyPy pip
+#- name: pypy | Install pip
+#  shell: curl -s https://bootstrap.pypa.io/get-pip.py | pypy; rm /usr/local/bin/pip{2,2.7}; mv /usr/local/bin/{,pypy}pip
+#  args:
+#    executable: /bin/bash
+#    creates: /usr/local/bin/pypypip
+
+# /usr/bin/virtualenv
+- name: virtualenv | Install
+  apt: name=virtualenv

@@ -1,0 +1,25 @@
+- name: "postgresql | Create role 'grafana'"
+  become_user: postgres
+  shell: 'createuser grafana || :'
+- name: "postgresql | Create database 'grafana'"
+  become_user: postgres
+  shell: 'createdb -O grafana grafana || :'
+
+- name: grafana | Install signing key
+  apt_key: keyserver=pgp.mit.edu id=D59097AB
+- name: grafana | Add packagecloud.io repository
+  apt_repository: repo='deb https://packagecloud.io/grafana/testing/debian wheezy main'
+- name: grafana | Install
+  apt: name=grafana
+- name: grafana | Copy /etc/grafana/grafana.ini
+  copy: src=grafana.ini dest=/etc/grafana/ mode=640 owner=root group=grafana
+  notify: restart grafana-server
+- name: grafana | Start grafana-server.service
+  service: name=grafana-server state=started enabled=yes
+
+- name: influxdb | Download .deb
+  get_url: url='https://s3.amazonaws.com/influxdb/influxdb_{{ latest.influxdb }}_amd64.deb' dest=/tmp/influxdb.deb
+- name: influxdb | Install .deb
+  apt: deb=/tmp/influxdb.deb
+- name: influxdb | Start influxdb.service
+  service: name=influxdb state=started enabled=yes
