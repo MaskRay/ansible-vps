@@ -1,0 +1,16 @@
+- name: unattended-upgrades | Install
+  apt: name=unattended-upgrades
+
+- name: unattended-upgrades | apt.conf.d
+  copy: src=20auto-upgrades dest=/etc/apt/apt.conf.d/
+
+- name: unstable
+  copy: src=unstable.list dest=/etc/apt/sources.list.d/
+  notify: apt-get update
+
+- name: experimental
+  copy: src=experimental.list dest=/etc/apt/sources.list.d/
+  notify: apt-get update
+
+- name: preferences
+  copy: src=preferences dest=/etc/apt/

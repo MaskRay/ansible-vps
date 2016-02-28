@@ -1,0 +1,5 @@
+- name: Install
+  apt: name=unbound
+
+- name: Copy unbound.conf
+  copy: src=unbound.{{inventory_hostname}}.conf dest=/etc/unbound/unbound.conf

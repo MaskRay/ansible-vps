@@ -1,16 +1,25 @@
 - name: Install libcharon-extra-plugins
-  apt: name=libcharon-extra-plugins state=latest
+  apt:
+    name:
+      - libcharon-extra-plugins
+      - libstrongswan-extra-plugins
+      - strongswan
+      - strongswan-charon
+      - strongswan-libcharon
+      - strongswan-starter
+    default_release: unstable
+    state: latest
 - name: Copy strongswan.conf for nameserver
-  template: src=strongswan.conf.j2 dest=/etc/strongswan.conf
-  notify: restart ipsec
+  copy: src=strongswan.conf dest=/etc/strongswan.conf
+  notify: restart strongswan
 - name: Copy ipsec.secrets
   copy: src=ipsec.secrets dest=/etc/ mode=600
-  notify: restart ipsec
+  notify: restart strongswan
 - name: Copy ipsec.conf
-  copy: src=ipsec.conf dest=/etc/
-  notify: restart ipsec
+  template: src=ipsec.conf.j2 dest=/etc/ipsec.conf
+  notify: restart strongswan
 - name: Copy ipsec.d
   copy: src=ipsec.d dest=/etc/
-  notify: restart ipsec
-- name: Start ipsec
-  service: name=ipsec state=started enabled=true
+  notify: restart strongswan
+- name: Start strongswan
+  service: name=strongswan state=started enabled=true

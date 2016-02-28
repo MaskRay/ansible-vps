@@ -7,14 +7,17 @@
     # No methods to run some of the roles. I circumvent this by using tags
     # `ansible-playbook site.yml`: install all packages
     # `ansible-playbook site.yml --tags python`: install python
+    - { role: apt, tags: [apt] }
     - { role: common, tags: [common] }
     - { role: tinc, tags: [tinc] }
     - { role: iptables, tags: [iptables] }
     - { role: nginx, tags: [nginx] }
     - { role: neovim, tags: [neovim] }
+    - { role: postfix, tags: [postfix] }
     - { role: python, tags: [python] }
     - { role: squid, tags: [squid] }
     - { role: strongswan, tags: [strongswan] }
+    - { role: unbound, tags: [unbound] }
     #- { role: nodejs, tags: [nodejs] }
     #- { role: postgresql, tags: [postgresql] }
     #- { role: elasticsearch, tags: [elasticsearch] }
