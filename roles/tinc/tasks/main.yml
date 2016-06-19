@@ -4,8 +4,10 @@
   apt: name=tinc default_release=experimental state=latest
 - name: mkdir -p /etc/tinc/{{tinc}}
   command: install -d -o ray -g ray /etc/tinc/{{tinc}}
-- name: Copy /etc/tinc/{{tinc}}
+- name: Copy /etc/tinc/{{tinc}}/hosts
   synchronize: src=/etc/tinc/{{tinc}}/hosts dest=/etc/tinc/{{tinc}}/
+- name: Copy /etc/tinc/{{tinc}}/tinc.conf
+  copy: src={{inventory_hostname}}/tinc.conf dest=/etc/tinc/{{tinc}}/tinc.conf
 - name: /etc/tinc/{{tinc}}/tinc-up
   shell: |
     { echo '#!/bin/sh'; echo 'ip l s $INTERFACE up'; echo "ip a a $(sed -rn '/Subnet/{s,.*(192.*)/32,\1,p}' /etc/tinc/{{tinc}}/hosts/$(hostname))/24 dev \$INTERFACE";} > /etc/tinc/{{tinc}}/tinc-up
@@ -16,8 +18,8 @@
   synchronize: src=roles/tinc/files/{{inventory_hostname}}/rsa_key.priv dest=/etc/tinc/{{tinc}}/rsa_key.priv
 - name: Copy /etc/tinc/{{tinc}}/ed25519_key.priv
   synchronize: src=roles/tinc/files/{{inventory_hostname}}/ed25519_key.priv dest=/etc/tinc/{{tinc}}/ed25519_key.priv
-- name: /etc/tinc/{{tinc}}/tinc.conf
-  shell: printf "Name = $(hostname)\n" > /etc/tinc/{{tinc}}/tinc.conf
-  become_user: ray
+  #- name: /etc/tinc/{{tinc}}/tinc.conf
+  #  shell: printf "Name = $(hostname)\n" > /etc/tinc/{{tinc}}/tinc.conf
+  #  become_user: ray
 - name: Start tinc@{{tinc}}
   service: name=tinc@{{tinc}} state=started enabled=true

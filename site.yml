@@ -9,14 +9,15 @@
     # `ansible-playbook site.yml --tags python`: install python
     - { role: apt, tags: [apt] }
     - { role: common, tags: [common] }
-    - { role: tinc, tags: [tinc] }
     - { role: iptables, tags: [iptables] }
     - { role: nginx, tags: [nginx] }
     - { role: neovim, tags: [neovim] }
     - { role: postfix, tags: [postfix] }
     - { role: python, tags: [python] }
     - { role: squid, tags: [squid] }
+    - { role: shadowsocks, tags: [shadowsocks] }
     - { role: strongswan, tags: [strongswan] }
+    - { role: tinc, tags: [tinc] }
     - { role: unbound, tags: [unbound] }
     #- { role: nodejs, tags: [nodejs] }
     #- { role: postgresql, tags: [postgresql] }

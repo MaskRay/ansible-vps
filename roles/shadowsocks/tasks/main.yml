@@ -1,0 +1,8 @@
+- name: pip3 install shadowsocks
+  command: pip3 install shadowsocks
+- name: Copy /etc/tinc/{{tinc}}/ss.config
+  copy: src=roles/shadowsocks/files/{{inventory_hostname}}/ss.json dest=/etc/shadowsocks/{{inventory_hostname}}.json
+- name: shadowsocks | service
+  copy: src=roles/shadowsocks/files/shadowsocks-server@.service dest=/etc/systemd/system/shadowsocks-server@.service
+- name: Start shadowsocks-server@{{inventory_hostname}}
+  service: name=shadowsocks-server@{{inventory_hostname}} state=started enabled=true

@@ -83,6 +83,9 @@
       - checkinstall
       - software-properties-common
 
+- name: Copy /etc/ssh/sshd_config
+  copy: src=sshd_config dest=/etc/ssh/ owner=0 group=0 mode=644
+
 - name: Set time zone
   command: timedatectl set-timezone Asia/Shanghai
 
